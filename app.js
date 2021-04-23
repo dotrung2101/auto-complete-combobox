@@ -24,7 +24,7 @@ function createBodyOfCustomTag(element) {
         list.classList.add("datalist-ul");
 
         var itemsData = data.split(",");
-        list.innerHTML = itemsData.map(e => `<li id="${element.id+e}">${e}</li>`).join("");
+        list.innerHTML = itemsData.map(e => `<li id="${element.id+itemsData.indexOf(e)}">${e}</li>`).join("");
         element.appendChild(list);
         addListener(element);
     }
@@ -34,6 +34,7 @@ function addListener(element){
     var input  = element.getElementsByClassName("datalist-input")[0];
     const list = element.getElementsByClassName("datalist-ul")[0];
     const options = element.attributes.data.value.split(",");
+    var selectedItem = element.id + "0";
     element.addEventListener("click", e => {
         if (e.target.classList.contains("datalist-input")) {
             element.classList.toggle("active");
@@ -55,15 +56,15 @@ function addListener(element){
         console.log(filterOptions);
 
         if (filterOptions.length === 0) {
-			list.classList.remove("active");
+			element.classList.remove("active");
             input.classList.add("error");
 		} else {
-			list.classList.add("active");
+			element.classList.add("active");
             input.classList.remove("error");
 		}
 
 		list.innerHTML = filterOptions
-			.map(o => `<li id="${element.id+filterOptions.indexOf(o)}">${o}</li>`)
+			.map(o => `<li id="${element.id+options.indexOf(o)}">${o}</li>`)
 			.join("");
     });
 
@@ -71,19 +72,60 @@ function addListener(element){
         if (e.target.nodeName.toLocaleLowerCase() === "li") {
             input.value = e.target.innerText;
             element.classList.remove("active");
-            const selectedItem = e.target.id;
+            selectedItem = e.target.id;
 
             list.innerHTML = options
-			.map(o => `<li id="${element.id+o}">${o}</li>`)
+			.map(o => `<li id="${element.id+options.indexOf(o)}">${o}</li>`)
 			.join("");
 
             document.getElementById(`${selectedItem}`).classList.add("active");
         }
     });
 
-    element.addEventListener('onkeyup', function(){
-        element
+    element.addEventListener('keyup', function(event){
+        if(!element.classList.contains("active")){
+            element.classList.add("active");
+        }
+        if(event.keyCode === 38 || event.keyCode === 9){
+            
+            const selected = (parseInt(selectedItem.substring(selectedItem.length-Math.ceil(Math.log10(options.length)))) - 1 );
+            if (selected >= 0) {
+                selectedItem = element.id + selected;
+                console.log(selectedItem);
+                list.innerHTML = options
+                    .map(o => `<li id="${element.id + options.indexOf(o)}">${o}</li>`)
+                    .join("");
+
+                document.getElementById(`${selectedItem}`).classList.add("active");
+                input.value = document.getElementById(`${selectedItem}`).innerText;
+            }
+        }
+        else if(event.keyCode === 40){
+            const selected = (parseInt(selectedItem.substring(selectedItem.length-Math.ceil(Math.log10(options.length)))) + 1 );
+            if(selected < options.length){
+                selectedItem = element.id + selected;
+                console.log(selectedItem);
+                list.innerHTML = options
+                    .map(o => `<li id="${element.id + options.indexOf(o)}">${o}</li>`)
+                    .join("");
+
+                document.getElementById(`${selectedItem}`).classList.add("active");
+                input.value = document.getElementById(`${selectedItem}`).innerText;
+            }
+        }
+        else if(event.keyCode === 13){
+            element.classList.remove("active");
+        }
     });
 }
 
 customTag("my-combobox", createBodyOfCustomTag);
+
+jQuery.fn.extend({
+    getText: function(){
+        return this.children(".datalist-input").val();
+    },
+    getData: function() {
+        return this.attr("data");
+    }
+})
