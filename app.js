@@ -131,16 +131,6 @@ function addListener(element){
     });
 }
 
-function checkObjExist(obj, array){
-    for(let i = 0; i < array.length; i++){
-        if(obj.value == array[i].value){
-            return i;
-        }
-    }
-
-    return -1;
-}
-
 initCustomTag("my-combobox", createBodyOfMyCombobox);
 
 jQuery.fn.extend({
