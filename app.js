@@ -16,7 +16,7 @@ function createBodyOfMyCombobox(element) {
         const data = element.attributes.data.value;
         var input = document.createElement("input");
         input.classList.add("datalist-input");
-        input.placeholder = "Giới tính";
+        input.placeholder = element.attributes.placeholder.value;
         element.appendChild(input);
         element.innerHTML += `<div class="warning">Dữ liệu không tồn tại trong hệ thống</div>`;
         element.innerHTML += `<i id="datalist-icon" class="fa fa-angle-down" aria-hidden="true"></i>`;
@@ -31,11 +31,11 @@ function createBodyOfMyCombobox(element) {
 }
 
 function addListener(element){
-    var input  = element.getElementsByClassName("datalist-input")[0];
+    const input  = element.getElementsByClassName("datalist-input")[0];
     const list = element.getElementsByClassName("datalist-ul")[0];
     const options = JSON.parse(element.attributes.data.value).data;
     let filterOptions = options;
-    var selectedItem = -1;
+    let selectedItem = -1;
     element.addEventListener("click", e => {
         if (e.target.classList.contains("datalist-input")) {
             element.classList.toggle("active");
