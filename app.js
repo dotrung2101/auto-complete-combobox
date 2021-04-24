@@ -1,11 +1,11 @@
 
-function customTag(tagName, fn) {
+function initCustomTag(tagName, initFunction) {
     document.createElement(tagName);
     //find all the tags occurrences (instances) in the document
     var tagInstances = document.getElementsByTagName(tagName);
     //for each occurrence run the associated function
     for (var i = 0; i < tagInstances.length; i++) {
-        fn(tagInstances[i]);
+        initFunction(tagInstances[i]);
     }
 }
 
@@ -34,7 +34,7 @@ function addListener(element){
     const input  = element.getElementsByClassName("datalist-input")[0];
     const list = element.getElementsByClassName("datalist-ul")[0];
     const options = JSON.parse(element.attributes.data.value).data;
-    let filterOptions = options;
+    var filterOptions = options;
     let selectedItem = -1;
     element.addEventListener("click", e => {
         if (e.target.classList.contains("datalist-input")) {
@@ -75,13 +75,19 @@ function addListener(element){
         if (e.target.nodeName.toLocaleLowerCase() === "li") {
             input.value = e.target.innerText;
             element.classList.remove("active");
-            selectedItem = e.target.id;
 
-            list.innerHTML = options
+            let obj = {
+                value : e.target.value,
+                text : ""+e.target.innerText.toString()
+            }
+
+            selectedItem = filterOptions.findIndex(x => x.value === obj.value && x.text === obj.text);
+
+            list.innerHTML = filterOptions
 			.map(o => `<li id="${element.id+o.value}" value="${o.value}"><i class="fa fa-check" aria-hidden="true"></i>${o.text}</li>`)
 			.join("");
 
-            document.getElementById(`${selectedItem}`).classList.add("active");
+            document.getElementById(`${element.id + filterOptions[selectedItem].value}`).classList.add("active");
         }
     });
 
@@ -125,7 +131,17 @@ function addListener(element){
     });
 }
 
-customTag("my-combobox", createBodyOfMyCombobox);
+function checkObjExist(obj, array){
+    for(let i = 0; i < array.length; i++){
+        if(obj.value == array[i].value){
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+initCustomTag("my-combobox", createBodyOfMyCombobox);
 
 jQuery.fn.extend({
     getText: function(){
