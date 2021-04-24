@@ -9,7 +9,7 @@ function customTag(tagName, fn) {
     }
 }
 
-function createBodyOfCustomTag(element) {
+function createBodyOfMyCombobox(element) {
     //code for rendering the element goes here
     if (element.attributes.data) {
         //get the data address from the element's data attribute
@@ -23,8 +23,8 @@ function createBodyOfCustomTag(element) {
         var list = document.createElement("ul");
         list.classList.add("datalist-ul");
 
-        var itemsData = data.split(",");
-        list.innerHTML = itemsData.map(e => `<li id="${element.id+itemsData.indexOf(e)}">${e}</li>`).join("");
+        var itemsData = JSON.parse(data).data;
+        list.innerHTML = itemsData.map(e => `<li id="${element.id+e.value}" value="${e.value}"><i class="fa fa-check" aria-hidden="true"></i>${e.text}</li>`).join("");
         element.appendChild(list);
         addListener(element);
     }
@@ -33,8 +33,9 @@ function createBodyOfCustomTag(element) {
 function addListener(element){
     var input  = element.getElementsByClassName("datalist-input")[0];
     const list = element.getElementsByClassName("datalist-ul")[0];
-    const options = element.attributes.data.value.split(",");
-    var selectedItem = element.id + "0";
+    const options = JSON.parse(element.attributes.data.value).data;
+    let filterOptions = options;
+    var selectedItem = -1;
     element.addEventListener("click", e => {
         if (e.target.classList.contains("datalist-input")) {
             element.classList.toggle("active");
@@ -49,8 +50,8 @@ function addListener(element){
             element.classList.add("active");
         }
 
-        const filterOptions = options.filter(
-			d => input.value === "" || d.toLocaleLowerCase().includes(input.value.toLocaleLowerCase())
+        filterOptions = options.filter(
+			d => input.value === "" || d.text.toLocaleLowerCase().includes(input.value.toLocaleLowerCase())
 		);
 
         console.log(filterOptions);
@@ -63,8 +64,10 @@ function addListener(element){
             input.classList.remove("error");
 		}
 
+        selectedItem = -1;
+
 		list.innerHTML = filterOptions
-			.map(o => `<li id="${element.id+options.indexOf(o)}">${o}</li>`)
+			.map(o => `<li id="${element.id+o.value}" value="${o.value}"><i class="fa fa-check" aria-hidden="true"></i>${o.text}</li>`)
 			.join("");
     });
 
@@ -75,7 +78,7 @@ function addListener(element){
             selectedItem = e.target.id;
 
             list.innerHTML = options
-			.map(o => `<li id="${element.id+options.indexOf(o)}">${o}</li>`)
+			.map(o => `<li id="${element.id+o.value}" value="${o.value}"><i class="fa fa-check" aria-hidden="true"></i>${o.text}</li>`)
 			.join("");
 
             document.getElementById(`${selectedItem}`).classList.add("active");
@@ -86,31 +89,34 @@ function addListener(element){
         if(!element.classList.contains("active")){
             element.classList.add("active");
         }
-        if(event.keyCode === 38 || event.keyCode === 9){
-            
-            const selected = (parseInt(selectedItem.substring(selectedItem.length-Math.ceil(Math.log10(options.length)))) - 1 );
-            if (selected >= 0) {
-                selectedItem = element.id + selected;
+        if(event.keyCode === 38 ){
+            selectedItem -= 1;
+            if (selectedItem >= 0) {
                 console.log(selectedItem);
-                list.innerHTML = options
-                    .map(o => `<li id="${element.id + options.indexOf(o)}">${o}</li>`)
+                list.innerHTML = filterOptions
+                    .map(o => `<li id="${element.id + o.value}" value="${o.value}"><i class="fa fa-check" aria-hidden="true"></i>${o.text}</li>`)
                     .join("");
 
-                document.getElementById(`${selectedItem}`).classList.add("active");
-                input.value = document.getElementById(`${selectedItem}`).innerText;
+                document.getElementById(`${element.id + filterOptions[selectedItem].value}`).classList.add("active");
+                input.value = document.getElementById(`${element.id + filterOptions[selectedItem].value}`).innerText;
+            }
+            else{
+                selectedItem += 1;
             }
         }
         else if(event.keyCode === 40){
-            const selected = (parseInt(selectedItem.substring(selectedItem.length-Math.ceil(Math.log10(options.length)))) + 1 );
-            if(selected < options.length){
-                selectedItem = element.id + selected;
+            selectedItem += 1;
+            if(selectedItem < filterOptions.length){
                 console.log(selectedItem);
-                list.innerHTML = options
-                    .map(o => `<li id="${element.id + options.indexOf(o)}">${o}</li>`)
+                list.innerHTML = filterOptions
+                    .map(o => `<li id="${element.id + o.value}" value="${o.value}"><i class="fa fa-check" aria-hidden="true"></i>${o.text}</li>`)
                     .join("");
 
-                document.getElementById(`${selectedItem}`).classList.add("active");
-                input.value = document.getElementById(`${selectedItem}`).innerText;
+                document.getElementById(`${element.id + filterOptions[selectedItem].value}`).classList.add("active");
+                input.value = document.getElementById(`${element.id + filterOptions[selectedItem].value}`).innerText;
+            }
+            else{
+                selectedItem -= 1;
             }
         }
         else if(event.keyCode === 13){
@@ -119,7 +125,7 @@ function addListener(element){
     });
 }
 
-customTag("my-combobox", createBodyOfCustomTag);
+customTag("my-combobox", createBodyOfMyCombobox);
 
 jQuery.fn.extend({
     getText: function(){
@@ -127,5 +133,10 @@ jQuery.fn.extend({
     },
     getData: function() {
         return this.attr("data");
+    },
+
+    getValue: function(){
+        return this.children(".datalist-ul").children(".active").val();
     }
 })
+

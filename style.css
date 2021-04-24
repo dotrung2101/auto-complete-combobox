@@ -128,11 +128,24 @@ i::before{
 	padding: 0.8em 1em 0.8em 1em;
 	color: #999;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+}
+
+.datalist-ul li i{
+	position: relative;
+	font-size: 20px;
+	color: #fff;
+	visibility: hidden;
 }
 
 .datalist-ul li.active{
     background: #059862;
 	color: #fff;
+}
+
+.datalist-ul li.active i{
+	visibility: visible;
 }
 
 .datalist-ul li:hover {

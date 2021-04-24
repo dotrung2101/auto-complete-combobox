@@ -12,13 +12,38 @@
 
 </head>
 <body>
-    <my-combobox id="combo1" data = "Nam, Nữ, Khác">
+    <my-combobox id="combo1" >
 
     </my-combobox>
 
-    <my-combobox id="combo2" data = "Nu, Nữ, Khác">
+    <my-combobox id="combo2">
 
     </my-combobox>
+    <script>
+        var data = {
+            data: [
+                {
+                    value: 0,
+                    text: "Nữ"
+                },
+                {
+                    value: 1,
+                    text: "Nam"
+                },
+                {
+                    value: 2,
+                    text: "Khác"
+                },
+                {
+                    value: 3,
+                    text:"Man"
+                }
+            ]
+        };
+
+        document.getElementsByTagName("my-combobox")[0].setAttribute("data", JSON.stringify(data));
+        document.getElementsByTagName("my-combobox")[1].setAttribute("data", JSON.stringify(data));
+    </script>
     <script src="./libs/jquery-3.6.0.min.js"></script>
     <script src="app.js"></script>
 </body>
