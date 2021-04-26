@@ -28,7 +28,7 @@ my-combobox.active .datalist-ul {
 	display: block;
 }
 
-.datalist-input {
+my-combobox .datalist-input {
 	padding-left: 1em;
     position: relative;
 	width: 100%;
@@ -40,21 +40,21 @@ my-combobox.active .datalist-ul {
 	outline: 0;
 }
 
-.datalist-input:focus {
+my-combobox .datalist-input:focus {
 	border: 1px solid #059862;
 	outline: 0;
 }
 
-.datalist-input.error{
+my-combobox .datalist-input.error{
     border: 1px solid #f00;
 }
 
-.datalist-input.error::before{
+my-combobox .datalist-input.error::before{
     content: "";
     
 }
 
-.warning{
+my-combobox .warning{
     display: none;
     background: #fff;
     z-index: 10000;
@@ -68,11 +68,11 @@ my-combobox.active .datalist-ul {
     padding: 3px;
 }
 
-.datalist-input.error:hover + .warning{
+my-combobox .datalist-input.error:hover + .warning{
     display: block;
 }
 
-img {
+my-combobox img {
 	position: absolute;
 	right: 0px;
     top: 50%;
@@ -88,26 +88,26 @@ img {
 	border-bottom-right-radius: 4px;
 }
 
-img:hover{
+my-combobox img:hover{
     background: #ccc;
 }
 
-.datalist-input:focus ~ img{
+my-combobox .datalist-input:focus ~ img{
     border-left: 1px solid #059862;
 }
 
-.datalist-input.error ~ img{
+my-combobox .datalist-input.error ~ img{
     border-left: 1px solid #f00;
 }
 
-img::before{
+my-combobox img::before{
     font-size: 30px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
 }
-.datalist-ul {
+my-combobox .datalist-ul {
 	display: none;
 	position: absolute;
 	margin: 5px 0 0 0;
@@ -124,7 +124,7 @@ img::before{
 	z-index: 100;
 }
 
-.datalist-ul li {
+my-combobox .datalist-ul li {
 	display: block;
 	text-align: left;
 	padding: 0.8em 1em 0.8em 1em;
@@ -134,7 +134,7 @@ img::before{
 	align-items: center;
 }
 
-.datalist-ul li img{
+my-combobox .datalist-ul li img{
 	position: relative;
 	color: #fff;
 	visibility: hidden;
@@ -143,16 +143,16 @@ img::before{
 	transform: none;
 }
 
-.datalist-ul li.active{
+my-combobox .datalist-ul li.active{
     background: #059862;
 	color: #fff;
 }
 
-.datalist-ul li.active img{
+my-combobox .datalist-ul li.active img{
 	visibility: visible;
 }
 
-.datalist-ul li:hover {
+my-combobox .datalist-ul li:hover {
 	background: #ccc;
 	color: #fff;
 }

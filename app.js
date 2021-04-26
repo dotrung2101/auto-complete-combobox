@@ -75,7 +75,7 @@ function addListener(element){
         if (e.target.nodeName.toLocaleLowerCase() === "li") {
             input.value = e.target.innerText;
             element.classList.remove("active");
-
+            input.classList.remove("error");
             let obj = {
                 value : e.target.value,
                 text : ""+e.target.innerText.toString()
@@ -121,8 +121,36 @@ function addListener(element){
         }
         else if(event.keyCode === 13){
             element.classList.remove("active");
+
+            list.innerHTML = options
+                    .map(o => `<li id="${element.id + o.value}" value="${o.value}"><img src="icons/checkmark-outline.svg">${o.text}</li>`)
+                    .join("");
+
+            document.getElementById(`${element.id + options[selectedItem].value}`).classList.add("active");
+            filterOptions = options;
+            selectedItem = filterOptions.findIndex(x => x.value === obj.value && x.text === obj.text);
         }
     });
+
+    input.addEventListener("focusout", function(){
+        var val = element.getElementsByClassName("datalist-input")[0];
+        var ind = options.findIndex(x => x.text.toLocaleLowerCase() === val.value.toLocaleLowerCase());
+        if(ind === -1){
+            val.classList.add("error");
+        }
+        else{
+            val.classList.remove("error");
+            selectedItem = ind;
+            list.innerHTML = options
+                    .map(o => `<li id="${element.id + o.value}" value="${o.value}"><img src="icons/checkmark-outline.svg">${o.text}</li>`)
+                    .join("");
+
+            document.getElementById(`${element.id + options[selectedItem].value}`).classList.add("active");
+            input.value = document.getElementById(`${element.id + options[selectedItem].value}`).innerText;
+        }
+
+        // element.classList.remove("active");
+    })
 }
 
 initCustomTag("my-combobox", createBodyOfMyCombobox);
@@ -132,11 +160,14 @@ jQuery.fn.extend({
         return this.children(".datalist-input").val();
     },
     getData: function() {
-        return JSON.parse(this.attr("data"));
+        return JSON.parse(this.attr("data")).data;
     },
 
     getValue: function(){
-        return this.children(".datalist-ul").children(".active").val();
+        if(this.children(".datalist-ul").children(".active").val()){
+            return this.children(".datalist-ul").children(".active").val();
+        }
+        return null;
     }
 })
 
