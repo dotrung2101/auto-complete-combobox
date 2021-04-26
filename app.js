@@ -19,12 +19,12 @@ function createBodyOfMyCombobox(element) {
         input.placeholder = element.attributes.placeholder.value;
         element.appendChild(input);
         element.innerHTML += `<div class="warning">Dữ liệu không tồn tại trong hệ thống</div>`;
-        element.innerHTML += `<i id="datalist-icon" class="fa fa-angle-down" aria-hidden="true"></i>`;
+        element.innerHTML += `<img src="icons/chevron-down-outline.svg">`;
         var list = document.createElement("ul");
         list.classList.add("datalist-ul");
 
         var itemsData = JSON.parse(data).data;
-        list.innerHTML = itemsData.map(e => `<li id="${element.id+e.value}" value="${e.value}"><i class="fa fa-check" aria-hidden="true"></i>${e.text}</li>`).join("");
+        list.innerHTML = itemsData.map(e => `<li id="${element.id+e.value}" value="${e.value}"><img src="icons/checkmark-outline.svg">${e.text}</li>`).join("");
         element.appendChild(list);
         addListener(element);
     }
@@ -39,7 +39,7 @@ function addListener(element){
     element.addEventListener("click", e => {
         if (e.target.classList.contains("datalist-input")) {
             element.classList.toggle("active");
-        } else if (e.target.nodeName.toLocaleLowerCase() === "i") {
+        } else if (e.target.nodeName.toLocaleLowerCase() === "img") {
             element.classList.toggle("active");
             input.focus();
         }
@@ -67,7 +67,7 @@ function addListener(element){
         selectedItem = -1;
 
 		list.innerHTML = filterOptions
-			.map(o => `<li id="${element.id+o.value}" value="${o.value}"><i class="fa fa-check" aria-hidden="true"></i>${o.text}</li>`)
+			.map(o => `<li id="${element.id+o.value}" value="${o.value}"><img src="icons/checkmark-outline.svg">${o.text}</li>`)
 			.join("");
     });
 
@@ -84,7 +84,7 @@ function addListener(element){
             selectedItem = filterOptions.findIndex(x => x.value === obj.value && x.text === obj.text);
 
             list.innerHTML = filterOptions
-			.map(o => `<li id="${element.id+o.value}" value="${o.value}"><i class="fa fa-check" aria-hidden="true"></i>${o.text}</li>`)
+			.map(o => `<li id="${element.id+o.value}" value="${o.value}"><img src="icons/checkmark-outline.svg">${o.text}</li>`)
 			.join("");
 
             document.getElementById(`${element.id + filterOptions[selectedItem].value}`).classList.add("active");
@@ -96,33 +96,27 @@ function addListener(element){
             element.classList.add("active");
         }
         if(event.keyCode === 38 ){
-            selectedItem -= 1;
-            if (selectedItem >= 0) {
+            if (selectedItem > 0) {
+                selectedItem -= 1;
                 console.log(selectedItem);
                 list.innerHTML = filterOptions
-                    .map(o => `<li id="${element.id + o.value}" value="${o.value}"><i class="fa fa-check" aria-hidden="true"></i>${o.text}</li>`)
+                    .map(o => `<li id="${element.id + o.value}" value="${o.value}"><img src="icons/checkmark-outline.svg">${o.text}</li>`)
                     .join("");
 
                 document.getElementById(`${element.id + filterOptions[selectedItem].value}`).classList.add("active");
                 input.value = document.getElementById(`${element.id + filterOptions[selectedItem].value}`).innerText;
-            }
-            else{
-                selectedItem += 1;
             }
         }
         else if(event.keyCode === 40){
-            selectedItem += 1;
-            if(selectedItem < filterOptions.length){
+            if(selectedItem < (filterOptions.length - 1)){
+                selectedItem += 1;
                 console.log(selectedItem);
                 list.innerHTML = filterOptions
-                    .map(o => `<li id="${element.id + o.value}" value="${o.value}"><i class="fa fa-check" aria-hidden="true"></i>${o.text}</li>`)
+                    .map(o => `<li id="${element.id + o.value}" value="${o.value}"><img src="icons/checkmark-outline.svg">${o.text}</li>`)
                     .join("");
 
                 document.getElementById(`${element.id + filterOptions[selectedItem].value}`).classList.add("active");
                 input.value = document.getElementById(`${element.id + filterOptions[selectedItem].value}`).innerText;
-            }
-            else{
-                selectedItem -= 1;
             }
         }
         else if(event.keyCode === 13){

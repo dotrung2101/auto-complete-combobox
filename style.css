@@ -72,7 +72,7 @@ my-combobox.active .datalist-ul {
     display: block;
 }
 
-i {
+img {
 	position: absolute;
 	right: 0px;
     top: 50%;
@@ -80,25 +80,27 @@ i {
     width: 30px;
     height: 100%;
     transform: translateY(-50%);
-    padding-left: 20px;
+    padding-left: 10px;
     padding-right: 10px;
     align-content: center;
     border-left: 1px solid #ccc;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
 }
 
-i:hover{
+img:hover{
     background: #ccc;
 }
 
-.datalist-input:focus ~ i{
+.datalist-input:focus ~ img{
     border-left: 1px solid #059862;
 }
 
-.datalist-input.error ~ i{
+.datalist-input.error ~ img{
     border-left: 1px solid #f00;
 }
 
-i::before{
+img::before{
     font-size: 30px;
     position: absolute;
     top: 50%;
@@ -132,11 +134,13 @@ i::before{
 	align-items: center;
 }
 
-.datalist-ul li i{
+.datalist-ul li img{
 	position: relative;
-	font-size: 20px;
 	color: #fff;
 	visibility: hidden;
+	border: none;
+	align-self: center;
+	transform: none;
 }
 
 .datalist-ul li.active{
@@ -144,7 +148,7 @@ i::before{
 	color: #fff;
 }
 
-.datalist-ul li.active i{
+.datalist-ul li.active img{
 	visibility: visible;
 }
 
