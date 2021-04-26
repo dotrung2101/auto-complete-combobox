@@ -129,6 +129,10 @@ function addListener(element){
             element.classList.remove("active");
         }
     });
+
+    element.addEventListener("focusout", function(e){
+        element.classList.remove("active");
+    })
 }
 
 initCustomTag("my-combobox", createBodyOfMyCombobox);
@@ -138,7 +142,7 @@ jQuery.fn.extend({
         return this.children(".datalist-input").val();
     },
     getData: function() {
-        return this.attr("data");
+        return JSON.parse(this.attr("data"));
     },
 
     getValue: function(){
