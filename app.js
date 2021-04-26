@@ -129,10 +129,6 @@ function addListener(element){
             element.classList.remove("active");
         }
     });
-
-    element.addEventListener("focusout", function(e){
-        element.classList.remove("active");
-    })
 }
 
 initCustomTag("my-combobox", createBodyOfMyCombobox);
